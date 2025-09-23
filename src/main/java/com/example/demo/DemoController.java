@@ -13,6 +13,16 @@ public class DemoController
     return "hello"; // hello.html 연결
     }
 
+     @GetMapping("/hello2")
+    public String hello2(Model model) {
+        model.addAttribute("data", "강승원님.");
+        model.addAttribute("hi", "방갑습니다.");
+        model.addAttribute("today", "오늘.");
+        model.addAttribute("weather", "날씨는.");
+        model.addAttribute("good", "매우 좋습니다.");
+        return "hello2"; // hello2.html로 이동
+    }
+
     @GetMapping("/about_detailed")
     public String about() {
     return "about_detailed"; 
