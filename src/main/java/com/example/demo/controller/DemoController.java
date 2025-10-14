@@ -48,10 +48,16 @@ public class DemoController
 
     @GetMapping("/testdb")
     public String getAllTestDBs(Model model) {
-    TestDB test = testService.findByName("홍길동");
-    model.addAttribute("data4", test);
-    System.out.println("데이터 출력 디버그 : " + test);
-    return "testdb";
-    }
-    
+        TestDB user1 = testService.findByName("홍길동");
+        TestDB user2 = testService.findByName("아저씨");
+        TestDB user3 = testService.findByName("꾸러기");
+
+        model.addAttribute("data4", user1); 
+        model.addAttribute("user2", user2); 
+        model.addAttribute("user3", user3); 
+
+        System.out.println("데이터 출력 디버그 : " + user1 + ", " + user2 + ", " + user3);
+
+        return "testdb"; 
+}
 } 
