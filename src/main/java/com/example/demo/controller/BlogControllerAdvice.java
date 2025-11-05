@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
-@ControllerAdvice
+@ControllerAdvice(assignableTypes = BlogController.class)
 public class BlogControllerAdvice {
 
     // 매개변수가 정수가 아닐 경우 (예: /article_edit/abc)

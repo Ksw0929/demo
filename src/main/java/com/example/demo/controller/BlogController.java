@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import com.example.demo.model.domain.Article;
+import com.example.demo.model.domain.Board;
 import com.example.demo.model.domain.TestDB;
 import com.example.demo.model.service.TestService;
 import com.example.demo.model.service.AddArticleRequest;
@@ -25,26 +26,46 @@ public class BlogController
     BlogService blogService; // DemoController 클래스 아래 객체 생성
     // 하단에 맵핑 이어서 추가
 
-    @GetMapping("/article_list") // 게시판 링크 지정
-    public String article_list(Model model) {
-        List<Article> list = blogService.findAll(); // 게시판 리스트
-        model.addAttribute("articles", list); // 모델에 추가
-        return "article_list"; // .HTML 연결
+    // @GetMapping("/article_list") // 게시판 링크 지정
+    // public String article_list(Model model) {
+    //     List<Article> list = blogService.findAll(); // 게시판 리스트
+    //     model.addAttribute("articles", list); // 모델에 추가
+    //     return "article_list"; // .HTML 연결
+    // }
+
+    @GetMapping("/board_list") // 새로운 게시판 링크 지정
+    public String board_list(Model model) {
+        List<Board> list = blogService.findAll(); // 게시판 전체 리스트, 기존 Article에서 Board로 변경됨
+        model.addAttribute("boards", list); // 모델에 추가
+        return "board_list"; // .HTML 연결
     }
 
-    @GetMapping("/article_edit/{id}")
-    public String article_edit(Model model, @PathVariable Long id) {
-        // 정수가 아닌 경우는 ControllerAdvice에서 처리됨
-        Optional<Article> articleOpt = blogService.findById(id);
+    @GetMapping("/board_view/{id}") // 게시판 링크 지정
+    public String board_view(Model model, @PathVariable Long id) {
+        Optional<Board> list = blogService.findById(id); // 선택한 게시판 글
 
-        if (articleOpt.isPresent()) {
-            model.addAttribute("article", articleOpt.get());
-            return "article_edit";
+        if (list.isPresent()) {
+            model.addAttribute("boards", list.get()); // 존재할 경우 실제 Board 객체를 모델에 추가
         } else {
-            // 존재하지 않는 글일 때
-            return "error_page/article_error";
+            // 처리할 로직 추가 (예: 오류 페이지로 리다이렉트, 예외 처리 등)
+            return "/error_page/article_error"; // 오류 처리 페이지로 연결
         }
+        return "board_view"; // .HTML 연결
     }
+
+    // @GetMapping("/article_edit/{id:\\d+}")
+    // public String article_edit(Model model, @PathVariable Long id) {
+    //     // 정수가 아닌 경우는 ControllerAdvice에서 처리됨
+    //     Optional<Article> articleOpt = blogService.findById(id);
+
+    //     if (articleOpt.isPresent()) {
+    //         model.addAttribute("article", articleOpt.get());
+    //         return "article_edit";
+    //     } else {
+    //         // 존재하지 않는 글일 때
+    //         return "error_page/article_error";
+    //     }
+    // }
 
     @PutMapping("/api/article_edit/{id}")
     public String updateArticle(@PathVariable Long id, @ModelAttribute AddArticleRequest request) {
