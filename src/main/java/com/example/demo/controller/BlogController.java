@@ -33,27 +33,7 @@ public class BlogController
     //     return "article_list"; // .HTML 연결
     // }
 
-    @GetMapping("/board_list") // 새로운 게시판 링크 지정
-    public String board_list(Model model) {
-        List<Board> list = blogService.findAll(); // 게시판 전체 리스트, 기존 Article에서 Board로 변경됨
-        model.addAttribute("boards", list); // 모델에 추가
-        return "board_list"; // .HTML 연결
-    }
-
-    @GetMapping("/board_view/{id}") // 게시판 링크 지정
-    public String board_view(Model model, @PathVariable Long id) {
-        Optional<Board> list = blogService.findById(id); // 선택한 게시판 글
-
-        if (list.isPresent()) {
-            model.addAttribute("boards", list.get()); // 존재할 경우 실제 Board 객체를 모델에 추가
-        } else {
-            // 처리할 로직 추가 (예: 오류 페이지로 리다이렉트, 예외 처리 등)
-            return "/error_page/article_error"; // 오류 처리 페이지로 연결
-        }
-        return "board_view"; // .HTML 연결
-    }
-
-    // @GetMapping("/article_edit/{id:\\d+}")
+    // @GetMapping("/article_edit/{id}")
     // public String article_edit(Model model, @PathVariable Long id) {
     //     // 정수가 아닌 경우는 ControllerAdvice에서 처리됨
     //     Optional<Article> articleOpt = blogService.findById(id);
@@ -67,27 +47,64 @@ public class BlogController
     //     }
     // }
 
-    @PutMapping("/api/article_edit/{id}")
-    public String updateArticle(@PathVariable Long id, @ModelAttribute AddArticleRequest request) {
-        blogService.update(id, request);
-        return "redirect:/article_list"; // 글 수정 이후 .html 연결
-    }
+    // @PutMapping("/api/article_edit/{id}")
+    // public String updateArticle(@PathVariable Long id, @ModelAttribute AddArticleRequest request) {
+    //     blogService.update(id, request);
+    //     return "redirect:/article_list"; // 글 수정 이후 .html 연결
+    // }
 
-    @DeleteMapping("/api/article_delete/{id}")
-    public String deleteArticle(@PathVariable Long id) {
-        blogService.delete(id);
-        return "redirect:/article_list";
-    }
+    // @DeleteMapping("/api/article_delete/{id}")
+    // public String deleteArticle(@PathVariable Long id) {
+    //     blogService.delete(id);
+    //     return "redirect:/article_list";
+    // }
 
-    @PostMapping("/api/articles")
-    public String addArticle(@ModelAttribute AddArticleRequest request) {
-        blogService.save(request);
-        return "redirect:/article_list"; // 저장 후 목록 페이지로 이동
-    }
+    // @PostMapping("/api/articles")
+    // public String addArticle(@ModelAttribute AddArticleRequest request) {
+    //     blogService.save(request);
+    //     return "redirect:/article_list"; // 저장 후 목록 페이지로 이동
+    // }
 
      @GetMapping("/favicon.ico")
     public void favicon() {
         // 아무 동작 없음
     }
+
+    @GetMapping("/board_list") // 새로운 게시판 링크 지정
+    public String board_list(Model model) {
+        List<Board> list = blogService.findAll(); // 게시판 전체 리스트, 기존 Article에서 Board로 변경됨
+        model.addAttribute("boards", list); // 모델에 추가
+        return "board_list"; // .HTML 연결
+    }
+    @GetMapping("/board_view/{id}") // 게시판 링크 지정
+    public String board_view(Model model, @PathVariable Long id) {
+        Optional<Board> list = blogService.findById(id); // 선택한 게시판 글
+
+        if (list.isPresent()) {
+            model.addAttribute("boards", list.get()); // 존재할 경우 실제 Board 객체를 모델에 추가
+        } else {
+            // 처리할 로직 추가 (예: 오류 페이지로 리다이렉트, 예외 처리 등)
+            return "/error_page/article_error"; // 오류 처리 페이지로 연결
+        }
+        return "board_view"; // .HTML 연결
+        }
+    @GetMapping("/board_edit/{id}")
+    public String board_edit(Model model, @PathVariable Long id) {
+        Optional<Board> boardOpt = blogService.findById(id);
+
+        if (boardOpt.isPresent()) {
+            model.addAttribute("board", boardOpt.get()); // Board 객체를 모델에 추가
+            return "board_edit"; // 수정 페이지로 이동
+        } else {
+            return "error_page/article_error"; // 없는 글이면 에러 페이지
+        }
+        }
+
+    @PutMapping("/api/board_edit/{id}")
+    public String updateBoard(@PathVariable Long id, @ModelAttribute AddArticleRequest request) {
+        blogService.update(id, request); // 수정 로직 (Article과 동일 구조 사용)
+        return "redirect:/board_list"; // 수정 후 목록 페이지로 이동
+        }    
+
 }
     

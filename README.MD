@@ -75,6 +75,7 @@ main.js (코드 추가)
 ## 6주차 수업완료
 
  - 블로그 게시판 수정 및 삭제 기능 구현 
+
 ## 10/24 5주차 연습문제 완료
  
  BlogRestController.java(주석 처리) - 중복을 방지하기 위해 주석 처리
@@ -103,3 +104,25 @@ main.js (코드 추가)
    - BlogControllerAdvice 클래스는 @ControllerAdvice를 이용하여 전역 예외를 처리하는 역할을 함
 
    - 링크 매개변수가 정수가 아닐 경우 발생하는 MethodArgumentTypeMismatchException을 처리하여 사용자를 article_error2.html로 안내하고 그 외의 일반적인  예외는       article_error.html로 이동시켜 안정적인 예외 처리를 구현  
+
+## 10주차 수업완료   
+
+## 11/12 7주차 연습문제 완료 
+
+ AddArticleRequest.java(코드 수정)
+
+  - title과 content 이외 나머지 변수 추가 및 Article toEntity() 주석처리
+
+ board_edit.html(파일 생성)
+
+  - 기존의 article_edit.html 코드를 가져와 article -> board로 수정 
+
+ BlogController.java(코드 수정)
+
+  - board_edit으로 가는 맵핑 등록, 수정 후 목록 페이지(board_list)로 가는 맵핑 작성 
+
+ BlogService(코드 수정)
+
+  - request.getUser() != null ? request.getUser() : board.getUser()  요청에서 user 값이 null이면 기존 board 객체의 user 값을 그대로 사용 다른 필드도 동일하게 null 체크 후 기존 값 유지.
+
+  - 추가된 필드가 null이어도 DB에 null로 들어가는 걸 방지할 수 있음. 즉, nullable = false 컬럼 때문에 발생할 수 있는 에러를 예방
