@@ -107,7 +107,7 @@ main.js (코드 추가)
 
 ## 10주차 수업완료   
 
-## 11/12 7주차 연습문제 완료 
+## 11/12 7주차(10차) 연습문제 완료 
 
  AddArticleRequest.java(코드 수정)
 
@@ -126,3 +126,5 @@ main.js (코드 추가)
   - request.getUser() != null ? request.getUser() : board.getUser()  요청에서 user 값이 null이면 기존 board 객체의 user 값을 그대로 사용 다른 필드도 동일하게 null 체크 후 기존 값 유지.
 
   - 추가된 필드가 null이어도 DB에 null로 들어가는 걸 방지할 수 있음. 즉, nullable = false 컬럼 때문에 발생할 수 있는 에러를 예방
+
+## 11주차 수업완료 
