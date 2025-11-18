@@ -80,23 +80,34 @@ public class BlogController
     //     return "board_list"; // .HTML 연결
     // }
 
-    @GetMapping("/board_list") // 새로운 게시판 링크 지정
-    public String board_list(Model model, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "") String keyword) {
-        PageRequest pageable = PageRequest.of(page, 5   ); // 한 페이지의 게시글 수
-        Page<Board> list; // Page를 반환
+    @GetMapping("/board_list")
+    public String board_list(Model model,
+                         @RequestParam(defaultValue = "0") int page,
+                         @RequestParam(defaultValue = "") String keyword) {
 
-        if (keyword.isEmpty()) {
-            list = blogService.findAll(pageable); // 기본 전체 출력(키워드 x)
-        } else {
-            list = blogService.searchByKeyword(keyword, pageable); // 키워드로 검색
-        }
-        model.addAttribute("boards", list); // 모델에 추가
-        model.addAttribute("totalPages", list.getTotalPages()); // 페이지 크기
-        model.addAttribute("currentPage", page); // 페이지 번호
-        model.addAttribute("keyword", keyword); // 키워드
-        return "board_list"; // .HTML 연결
-}
+    int pageSize = 5; // 한 페이지 게시글 수
+    PageRequest pageable = PageRequest.of(page, pageSize);
+    Page<Board> list;
 
+    if (keyword.isEmpty()) {
+        list = blogService.findAll(pageable);
+    } else {
+        list = blogService.searchByKeyword(keyword, pageable);
+    }
+
+    // ⭐ 페이지 번호 계산
+    int startNum = (page * pageSize) + 1;
+
+    model.addAttribute("boards", list);
+    model.addAttribute("totalPages", list.getTotalPages());
+    model.addAttribute("currentPage", page);
+    model.addAttribute("keyword", keyword);
+
+    // ⭐ 번호 전달
+    model.addAttribute("startNum", startNum);
+
+    return "board_list";
+    }
     @GetMapping("/board_write")
     public String board_write() {
         return "board_write";
