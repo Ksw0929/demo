@@ -5,7 +5,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,13 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.model.domain.Article;
 import com.example.demo.model.domain.Board;
-import com.example.demo.model.domain.TestDB;
-import com.example.demo.model.service.TestService;
 import com.example.demo.model.service.AddArticleRequest;
 import com.example.demo.model.service.BlogService;  // 최상단 서비스 클래스 연동 추가
-import java.util.List;
 import java.util.Optional;
 
 @Controller // 컨트롤러 어노테이션 명시
@@ -95,7 +90,7 @@ public class BlogController
         list = blogService.searchByKeyword(keyword, pageable);
     }
 
-    // ⭐ 페이지 번호 계산
+    //페이지 번호 계산
     int startNum = (page * pageSize) + 1;
 
     model.addAttribute("boards", list);
@@ -103,7 +98,7 @@ public class BlogController
     model.addAttribute("currentPage", page);
     model.addAttribute("keyword", keyword);
 
-    // ⭐ 번호 전달
+    //번호 전달
     model.addAttribute("startNum", startNum);
 
     return "board_list";
