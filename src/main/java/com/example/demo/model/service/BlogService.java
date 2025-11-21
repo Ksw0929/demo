@@ -73,6 +73,6 @@ public class BlogService {
     } // LIKE 검색 제공(대소문자 무시)
 
     public void delete(Long id) {
-        blogRepository.deleteById(id);
+        blogRepository2.deleteById(id);
     }
 }

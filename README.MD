@@ -144,3 +144,7 @@ main.js (코드 추가)
    - iter.index(반복 인덱스)를 이용해 startNum + iter.index 형태로 번호를 출력
 
    - 이를 통해 페이지가 바뀔 때마다 번호가 자동으로 증가하며 사용자에게 직관적인 번호 목록을 제공
+
+## 11/22 9주차(11주차) 연습문제 완료 - 삭제 버튼 구현 
+
+  BlogController.java(코드 추가) - DeleteMapping 추가하여 삭제 기능 구현 
