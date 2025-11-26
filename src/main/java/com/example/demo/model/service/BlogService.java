@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import com.example.demo.model.domain.Board;
-import com.example.demo.model.repository.BlogRepository;
+// import com.example.demo.model.repository.BlogRepository;
 import com.example.demo.model.repository.BoardRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor // 생성자 자동 생성(부분)
 public class BlogService {
     @Autowired // 객체 주입 자동화, 생성자 1개면 생략 가능
-    private final BlogRepository blogRepository; // 리포지토리 선언
+    // private final BlogRepository blogRepository; // 리포지토리 선언
     private final BoardRepository blogRepository2; // 리포지토리 선언
     
     // public List<Article> findAll() { // 게시판 전체 목록 조회
