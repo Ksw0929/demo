@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,6 +18,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 
 @Controller // 컨트롤러 어노테이션 명시
 public class MemberController
@@ -29,11 +31,19 @@ public class MemberController
         return "join_new"; // .HTML 연결
     }  
 
-    @PostMapping("/api/members") // 회원 가입 저장
-    public String addmembers(@ModelAttribute AddMemberRequest request) {
-        memberService.saveMember(request);
-        return "join_end"; // .HTML 연결
+   @PostMapping("/api/members")
+    public String addmembers(@Valid @ModelAttribute AddMemberRequest request,
+                         BindingResult bindingResult,
+                         Model model) {
+
+    if (bindingResult.hasErrors()) {
+        model.addAttribute("error", bindingResult.getFieldError().getDefaultMessage());
+        return "join_new"; // 다시 입력 페이지로 이동
     }
+
+    memberService.saveMember(request);
+    return "join_end";
+}
 
     @GetMapping("/member_login") // 로그인 페이지 연결
     public String member_login() {
@@ -58,6 +68,8 @@ public class MemberController
         String email = request.getEmail(); // 이메일 얻기
 
         session.setAttribute("userId", sessionId); // 아이디 이름 설정
+        session.setAttribute("loginEmail", email);
+        session.setAttribute("email", member.getEmail());
         return "redirect:/board_list"; // 로그인 성공 후 이동할 페이지
     } catch (IllegalArgumentException e) {
         model.addAttribute("error", e.getMessage()); // 에러 메시지 전달

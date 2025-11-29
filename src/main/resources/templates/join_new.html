@@ -9,6 +9,9 @@
     <body>
         <div class="container">
             <h1 class="mt-5">회원 가입 화면</h1>
+            <div class="mt-3 text-danger" th:if="${error}">
+            <p th:text="${error}"></p>
+            </div>
                 <!-- 회원가입 폼 -->
                 <div class="mt-4">
                     <div class="card shadow-sm">
