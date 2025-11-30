@@ -13,6 +13,7 @@ public class AddArticleRequest {
     private String newdate;
     private String count;
     private String likec;
+    
 
     public Board toEntity(){ // Article 객체 생성
         return Board.builder()

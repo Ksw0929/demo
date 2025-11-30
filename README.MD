@@ -80,7 +80,7 @@ main.js (코드 추가)
  
  BlogRestController.java(주석 처리) - 중복을 방지하기 위해 주석 처리
 
- BlogController(코드 수정) 
+ BlogController.java(코드 수정) 
  
     - 기존의 BlogRestController.java 소스코드를 가져와 ResponseEntity<Article> → String 변경하여 "redirect:/article_list" 반환 가능하도록 함
 
@@ -121,7 +121,7 @@ main.js (코드 추가)
 
   - board_edit으로 가는 맵핑 등록, 수정 후 목록 페이지(board_list)로 가는 맵핑 작성 
 
- BlogService(코드 수정)
+ BlogService.java(코드 수정)
 
   - request.getUser() != null ? request.getUser() : board.getUser()  요청에서 user 값이 null이면 기존 board 객체의 user 값을 그대로 사용 다른 필드도 동일하게 null 체크 후 기존 값 유지.
 
@@ -157,7 +157,7 @@ main.js (코드 추가)
   
    pom.xml (코드 추가) - Vaildation 의존성 모듈 추가 
 
-   AddMemberRequest.java (코드 수정 및 추가) 
+   AddMemberRequest.java (코드 추가) 
 
    - 회원가입 시 이름, 이메일, 비밀번호, 나이, 전화번호, 주소 등 모든 필수 입력값에 공백(빈 문자열) 이 들어오지 않도록 하기 위해 @NotBlank 어노테이션을 추가
 
@@ -171,6 +171,22 @@ main.js (코드 추가)
 
    - 휴대전화번호, 주소 추가적인 검증은 없지만 공백 방지를 위해 @NotBlank 어노테이션 추가 
 
-   MemberController(코드 추가) - @Valid 를 이용해 AddMemberRequest의 검증을 실행함 bindingResult.hasErrors() 를 이용해 검증 실패 여부 확인 실패 시 사용자에게 오류 메시지 출력 후 다시 입력하도록 유도하게 작성
+   MemberController.java (코드 추가) - @Valid 를 이용해 AddMemberRequest의 검증을 실행함 bindingResult.hasErrors() 를 이용해 검증 실패 여부 확인 실패 시 사용자에게 오류 메시지 출력 후 다시 입력하도록 유도하게 작성
 
    join_new.html - 컨트롤러에서 전달한 error 메시지를 사용자에게 보여줌. 유효성 검증 실패 시 어떤 부분이 문제인지 알 수 있게 코드 추가 
+
+## 11/30 13주차 연습문제 완료 - 작성자 게시글 수정,삭제 구현 완료 
+
+  BlogController.java(코드 추가) 
+   
+   - String email = (String) session.getAttribute("email"); 
+     request.setUser(email); 
+     
+   - 위 코드를 추가하여 세션에서 현재 로그인한 사용자의 이메일을 꺼낸 뒤, 해당 값을 게시글 작성자(user) 필드에 저장하여 저장된 게시글의 작성자는 GUEST가 아닌 로그인한 이메일로 기록되게 함
+
+   - String loginEmail = (String) session.getAttribute("email");
+     model.addAttribute("loginEmail", loginEmail);
+
+   - 위 코드를 추가하여 HTML 파일에서 로그인한 사용자와 글 작성자의 이메일을 비교하여 작성자와 로그인 사용자가 동일할 때만 버튼이 표시되도록 조건문을 추가
+
+ board_view.html - th:if 조건문을 사용하여 로그인한 사용자와 게시글 작성자가 동일한 경우에만 수정, 삭제 버튼이 표시하도록 변경 

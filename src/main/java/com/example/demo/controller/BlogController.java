@@ -120,18 +120,23 @@ public class BlogController
         return "board_write";
     }
 
-    @GetMapping("/board_view/{id}") // 게시판 링크 지정
-    public String board_view(Model model, @PathVariable Long id) {
-        Optional<Board> list = blogService.findById(id); // 선택한 게시판 글
+    @GetMapping("/board_view/{id}")
+    public String board_view(Model model, @PathVariable Long id, HttpSession session) {
 
-        if (list.isPresent()) {
-            model.addAttribute("boards", list.get()); // 존재할 경우 실제 Board 객체를 모델에 추가
-        } else {
-            // 처리할 로직 추가 (예: 오류 페이지로 리다이렉트, 예외 처리 등)
-            return "/error_page/article_error"; // 오류 처리 페이지로 연결
-        }
-        return "board_view"; // .HTML 연결
-        }
+    Optional<Board> list = blogService.findById(id);
+
+    if (list.isPresent()) {
+        model.addAttribute("boards", list.get());
+    } else {
+        return "/error_page/article_error";
+    }
+
+    String loginEmail = (String) session.getAttribute("email");   // 로그인 사용자
+    model.addAttribute("loginEmail", loginEmail);                 // 뷰로 전달
+
+    return "board_view";
+    }
+
     @GetMapping("/board_edit/{id}")
     public String board_edit(Model model, @PathVariable Long id) {
         Optional<Board> boardOpt = blogService.findById(id);
@@ -150,11 +155,16 @@ public class BlogController
         return "redirect:/board_list"; // 수정 후 목록 페이지로 이동
         }    
 
-    @PostMapping("/api/boards") // 글쓰기 게시판 저장
-    public String addboards(@ModelAttribute AddArticleRequest request) {
-        blogService.save(request);
-        return "redirect:/board_list"; // .HTML 연결
-        }
+    @PostMapping("/api/boards")
+    public String addboards(@ModelAttribute AddArticleRequest request, HttpSession session) {
+
+    String email = (String) session.getAttribute("email"); // 로그인한 email
+    request.setUser(email); // 작성자 설정
+
+    blogService.save(request);  // 저장
+    return "redirect:/board_list";
+    }
+
     @DeleteMapping("/api/board_delete/{id}")
     public String deleteBoard(@PathVariable Long id) {
         blogService.delete(id);
