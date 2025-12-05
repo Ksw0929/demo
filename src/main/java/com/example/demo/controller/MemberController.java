@@ -50,48 +50,51 @@ public class MemberController
         return "login"; // .HTML 연결
     }
 
-    @PostMapping("/api/login_check") // 로그인(아이디, 패스워드) 체크
-    public String checkMembers(@ModelAttribute AddMemberRequest request, Model model, HttpServletRequest request2, HttpServletResponse response) {
-        
-    try {
-        HttpSession session = request2.getSession(false); // 기존 세션 가져오기(존재하지 않으면 null 반환)
-        if (session != null) {
-            session.invalidate(); // 기존 세션 무효화
-            Cookie cookie = new Cookie("JSESSIONID", null); // JSESSIONID 초기화
-            cookie.setPath("/"); // 쿠키 경로
-            cookie.setMaxAge(0); // 쿠키 삭제(0으로 설정)
-            response.addCookie(cookie); // 응답으로 쿠키 전달
-        }   
-        session = request2.getSession(true); // 새로운 세션 생성
-        Member member = memberService.loginCheck(request.getEmail(), request.getPassword());
-        String sessionId = UUID.randomUUID().toString(); // 임의의 고유 ID로 세션 생성
-        String email = request.getEmail(); // 이메일 얻기
+    @PostMapping("/api/login_check")
+    public String checkMembers(
+        @ModelAttribute AddMemberRequest request,
+        Model model,
+        HttpServletRequest request2) {
 
-        session.setAttribute("userId", sessionId); // 아이디 이름 설정
-        session.setAttribute("loginEmail", email);
-        session.setAttribute("email", member.getEmail());
-        return "redirect:/board_list"; // 로그인 성공 후 이동할 페이지
-    } catch (IllegalArgumentException e) {
-        model.addAttribute("error", e.getMessage()); // 에러 메시지 전달
-        return "login"; // 로그인 실패 시 로그인 페이지로 리다이렉트
-    }
-    }
-    @GetMapping("/api/logout") // 로그아웃 버튼 동작
-    public String member_logout(Model model, HttpServletRequest request2, HttpServletResponse response) {
     try {
-        HttpSession session = request2.getSession(false); // 기존 세션 가져오기(존재하지 않으면 null 반환)
-        session.invalidate(); // 기존 세션 무효화
-        Cookie cookie = new Cookie("JSESSIONID", null); // 기본 이름은 JSESSIONID
-        cookie.setPath("/"); // 쿠키의 경로
-        cookie.setMaxAge(0); // 쿠키 만료 0이면 삭제
-        response.addCookie(cookie); // 응답에 쿠키 설정
-        session = request2.getSession(true); // 새로운 세션 생성
-        System.out.println("세션 userId: " + session.getAttribute("userId" )); // 초기화 후 IDE 터미널에 세션 값 출력
-        return "login"; // 로그인 페이지로 리다이렉트
+        //로그인 검증
+        Member member = memberService.loginCheck(
+                request.getEmail(),
+                request.getPassword());
+
+        //사용자별 세션 생성 (기존 세션 유지)
+        HttpSession session = request2.getSession(true);
+
+        //사용자 고유 정보 세션에 저장
+        session.setAttribute("loginEmail", member.getEmail());
+        session.setAttribute("loginName", member.getName());
+
+        return "redirect:/board_list";
+
     } catch (IllegalArgumentException e) {
-        model.addAttribute("error", e.getMessage()); // 에러 메시지 전달
-        return "login"; // 로그인 실패 시 로그인 페이지로 리다이렉트
+        model.addAttribute("error", e.getMessage());
+        return "login";
     }
     }
+
+    @GetMapping("/api/logout")
+    public String member_logout(
+        HttpServletRequest request2,
+        HttpServletResponse response) {
+
+    HttpSession session = request2.getSession(false);
+
+    if (session != null) {
+        session.invalidate(); // ✅ 현재 사용자만 로그아웃
+    }
+
+    // ✅ 쿠키 삭제
+    Cookie cookie = new Cookie("JSESSIONID", null);
+    cookie.setPath("/");
+    cookie.setMaxAge(0);
+    response.addCookie(cookie);
+
+    return "redirect:/member_login";
+}
 }
     

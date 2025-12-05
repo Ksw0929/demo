@@ -28,6 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.UUID;
 
 @Controller // 컨트롤러 어노테이션 명시
 public class FileController
@@ -49,8 +50,12 @@ public class FileController
                 Files.createDirectories(uploadPath);
              }
             String sanitizedEmail = email.replaceAll("[^a-zA-Z0-9]", "_");
-            Path filePath = uploadPath.resolve(sanitizedEmail + ".txt"); // 업로드 폴더에 .txt 이름 설정
-            System.out.println("File path: " + filePath); // 디버깅용 출력
+            String uuid = UUID.randomUUID().toString();
+            String fileName = uuid + "_" + sanitizedEmail + ".txt";
+
+            Path filePath = uploadPath.resolve(fileName);
+            System.out.println("File path: " + filePath);
+
 
             try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath.toFile()))) {
                 writer.write("메일 제목: " + subject); // 쓰기
