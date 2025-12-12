@@ -30,9 +30,9 @@
 
  hello2.html(파일 생성) 
     
-    - hello2.html은 DemoController의 /hello2 매핑 메서드와 연결된 페이지로, 컨트롤러에서 Model을 통해 전달된 (data, hi, today,weather,good)를 <p th:text="${변수명}"> 형태로 화면에 표시
+  - hello2.html은 DemoController의 /hello2 매핑 메서드와 연결된 페이지로, 컨트롤러에서 Model을 통해 전달된 (data, hi, today,weather,good)를 <p th:text="${변수명}"> 형태로 화면에 표시
 
-    - 마지막에는 /hello로 이동할 수 있는 링크를 추가하여 첫 번째 페이지로 돌아갈 수 있게 구성
+  - 마지막에는 /hello로 이동할 수 있는 링크를 추가하여 첫 번째 페이지로 돌아갈 수 있게 구성
 
  hello.html(코드 수정) - 기존에 자기 자신으로 연결되던 링크를 /hello2로 수정하여, 두 번째 페이지(hello2.html)로 이동할 수 있게 변경
 
