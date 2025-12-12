@@ -82,9 +82,9 @@ main.js (코드 추가)
 
  BlogController.java(코드 수정) 
  
-    - 기존의 BlogRestController.java 소스코드를 가져와 ResponseEntity<Article> → String 변경하여 "redirect:/article_list" 반환 가능하도록 함
+  - 기존의 BlogRestController.java 소스코드를 가져와 ResponseEntity<Article> → String 변경하여 "redirect:/article_list" 반환 가능하도록 함
 
-    - "redirect:/article_list" 추가하여 저장 후 페이지 자동 전환하게 함
+  - "redirect:/article_list" 추가하여 저장 후 페이지 자동 전환하게 함
 
 ## 10/25 6주차 연습문제 완료 - 예외 처리
 
